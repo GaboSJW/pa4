@@ -1,0 +1,120 @@
+---
+title: "pa4"
+subtitle: "fricatives"
+author: "Jiawei Shao"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+#Description of the data
+
+```{r echo=F, message=FALSE, warning=FALSE, paged.print=TRUE}
+
+library("tidyverse")
+library("readr")
+# Load the dataset
+fricatives <- read_csv("../data_raw/fricatives/fricatives.csv")
+# Tidy dataset
+fricatives %>% 
+  unite(., 
+        col = s,
+        c('s_cog', 's_skewness'),
+        sep = "_" ) %>% 
+  unite(., 
+        col = sh,
+        c('sh_cog', 'sh_skewness'),
+        sep = "_" ) %>% 
+  pivot_longer(., 
+               cols = c("s", "sh"), 
+               names_to = "phoneme", 
+               values_to = "value") %>% 
+  separate(.,
+           col = value,
+           into = c('cog', 'skewness'),
+           sep = "_") %>% 
+  write_csv("../data_tidy/data_tidy.csv")
+
+fricatives_tidy <- read_csv("../data_tidy/data_tidy.csv") %>% 
+  group_by(., phoneme) %>% 
+  summarize(., mean_cog = mean(cog), 
+          mean_skewness = mean(skewness), 
+          sd_cog = sd(cog), 
+          sd_skewness = sd(skewness))  
+  knitr::kable(fricatives_tidy)
+
+```
+---
+#Boxplot of center of gravity as a function of phoneme
+
+```{r echo = F, message=FALSE, warning=FALSE, fig.height = 5, fig.retina=2}
+fricatives_tidy <- read_csv("../data_tidy/data_tidy.csv") 
+
+boxplot <- fricatives_tidy %>% 
+  ggplot(., aes(x = phoneme, y = cog)) +
+    geom_boxplot(color = "purple") +
+  stat_summary(fun.data = mean_se, geom = "pointrange") +
+  labs(x = "phoneme", y = "center of gravity",
+       tittle = "Cog as a function of phoneme",
+       caption = "Mean +/- SE")
+boxplot
+```
+####figure 1
+
+---
+#Plot of skewness as a function of phoneme
+```{r echo = F, message=FALSE, warning=FALSE, fig.height = 5, fig.retina=2}
+fricatives_tidy <- read_csv("../data_tidy/data_tidy.csv") 
+
+plot<-fricatives_tidy %>% 
+  ggplot(., aes(x = phoneme, y = skewness)) +
+  geom_violin(scale = "area", 
+               fill = "blue", alpha = 0.3)+
+  stat_summary(fun.data = mean_se, geom = "pointrange") +
+  labs(x = "phoneme", y = "skewness",
+       tittle = "Skewness as a function of phoneme",
+       caption = "Mean +/- SE") 
+plot
+```
+####figure 2
+---
+#Model fitting summary
+```{r echo = F, message=FALSE, warning=FALSE, fig.height = 5, fig.retina=2}
+fricatives_tidy <- read_csv("../data_tidy/data_tidy.csv") 
+s_data<-filter(fricatives_tidy, phoneme == "s")
+model_s <- lm(cog ~ skewness, data =s_data )
+summary(model_s) 
+
+
+```
+#### table 1
+---
+
+#Scatter plot
+```{r echo = F, message=FALSE, warning=FALSE, fig.height = 5, fig.retina=2}
+fricatives_tidy <- read_csv("../data_tidy/data_tidy.csv") 
+model_s <- lm(cog ~ skewness, data = filter(fricatives_tidy, phoneme == "s"))
+model_s %>% 
+  ggplot(., aes(x = skewness, y = cog)) +
+  geom_point() +
+  geom_smooth(method = lm)+
+  labs(x = "skewness", y = "center of gravity",
+       tittle = "center of gravity as a function of log(skewness) for the [s]")
+```
+####figure 3
+---
+
+#Model diagnostics
+```{r echo=F, fig.height=5, fig.retina=2, fig.width=10, message=FALSE, warning=FALSE}
+library(ds4ling)
+diagnosis(model_s)
+```
+####figure 4, 5, 6
+---
+
+#Results
+
+We used R to process the fricatives data, specifically the center of gravity and the skewness of the phonemes *s* and *sh*. Figure 1 and figure 2 suggest that  each of the two phonemes we are looking into shows a pattern to have certain range of the center of gravity as well as the skewness. We took one step further trying to test if there would be correlation between the center of gravity and the skewness within the spectrum of just one phoneme. We fitted the center of gravity and the skewness of mopheme *s* to simple linear regression model, the summary are shown in table 1, together with figure 3 it is suggested that skewness and center of gravity for *s* can show a significant positive correlation. We then ran model diagnosis to evaluate the prediction error.The figure 4 shows the weak homoskedasticity of residuals; the figure 5 shows a non-normal distribution of the residuals, together with the figure 6 the QQ plot it is indicated that the linear model is not well fit for the dataset. 

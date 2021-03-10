@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>pa4</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Jiawei Shao" />
+    <script src="libs/header-attrs-2.7/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# pa4
+## fricatives
+### Jiawei Shao
+
+---
+
+#Description of the data
+
+
+|phoneme | mean_cog| mean_skewness|   sd_cog| sd_skewness|
+|:-------|--------:|-------------:|--------:|-----------:|
+|s       | 5690.524|    -0.7714211| 913.2537|   0.2834032|
+|sh      | 3994.823|     0.5527295| 697.0922|   0.4411120|
+---
+#Boxplot of center of gravity as a function of phoneme
+
+&lt;img src="index_files/figure-html/unnamed-chunk-2-1.png" width="504" /&gt;
+####figure 1
+
+---
+#Plot of skewness as a function of phoneme
+&lt;img src="index_files/figure-html/unnamed-chunk-3-1.png" width="504" /&gt;
+####figure 2
+---
+#Model fitting summary
+
+```
+## 
+## Call:
+## lm(formula = cog ~ skewness, data = s_data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1060.74   -21.72    58.96   123.00   405.24 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   8027.2      212.3   37.80  &lt; 2e-16 ***
+## skewness      3029.1      259.1   11.69 7.69e-10 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 320.1 on 18 degrees of freedom
+## Multiple R-squared:  0.8836,	Adjusted R-squared:  0.8771 
+## F-statistic: 136.6 on 1 and 18 DF,  p-value: 7.691e-10
+```
+#### table 1
+---
+
+#Scatter plot
+&lt;img src="index_files/figure-html/unnamed-chunk-5-1.png" width="504" /&gt;
+####figure 3
+---
+
+#Model diagnostics
+&lt;img src="index_files/figure-html/unnamed-chunk-6-1.png" width="720" /&gt;
+####figure 4, 5, 6
+---
+
+#Results
+
+We used R to process the fricatives data, specifically the center of gravity and the skewness of the phonemes *s* and *sh*. Figure 1 and figure 2 suggest that  each of the two phonemes we are looking into shows a pattern to have certain range of the center of gravity as well as the skewness. We took one step further trying to test if there would be correlation between the center of gravity and the skewness within the spectrum of just one phoneme. We fitted the center of gravity and the skewness of mopheme *s* to simple linear regression model, the summary are shown in table 1, together with figure 3 it is suggested that skewness and center of gravity for *s* can show a significant positive correlation. We then ran model diagnosis to evaluate the prediction error.The figure 4 shows the weak homoskedasticity of residuals; the figure 5 shows a non-normal distribution of the residuals, together with the figure 6 the QQ plot it is indicated that the linear model is not well fit for the dataset. 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
